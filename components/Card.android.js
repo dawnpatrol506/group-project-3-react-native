@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View, Button, StyleSheet, Dimensions } from 'react-native';
+import AnButton from './AnButton';
 const dims = Dimensions.get('screen');
 
 const Card = props => (
@@ -12,7 +13,7 @@ const Card = props => (
         </View>
         <View style={props.hasButtons ? style.cardBottom : style.hidden}>
             {props.hasButtons ? props.buttons.map((button, index) => {
-                return <Button color={button.color} key={index} title={button.name} onPress={button.func} />
+                return <AnButton color={button.color} key={index} title={button.name} onPress={button.func} />
             }) : null}
         </View>
     </View>
@@ -28,7 +29,7 @@ const style = StyleSheet.create({
         borderTopWidth: 0.5,
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-evenly'
+        justifyContent: 'space-around'
     },
     cardContent: {
         flex: 1,
@@ -44,7 +45,7 @@ const style = StyleSheet.create({
         minHeight: 120,
         backgroundColor: '#f2f2f2',
         borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
+        borderBottomRightRadius: 10
     },
     hidden: { display: 'none' }
 })

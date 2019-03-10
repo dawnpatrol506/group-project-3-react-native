@@ -1,7 +1,8 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, View, Text, RefreshControl, Modal, Button, TextInput } from 'react-native';
+import { SafeAreaView, ScrollView, View, Text, RefreshControl, Modal, TouchableOpacity, TextInput } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import { SecureStore } from 'expo';
+import AnButton from '../components/AnButton';
 import Card from '../components/Card';
 import Axios from 'axios';
 let username = null;
@@ -169,7 +170,7 @@ export default class Station extends React.Component {
                 <NavigationEvents
                     onWillFocus={this.handleRefresh}
                 />
-                <ScrollView style={{backgroundColor: 'white'}} refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.handleRefresh} />}>
+                <ScrollView refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.handleRefresh} />}>
                     {this.state.workOrders ? this.state.workOrders.map((wo, index) => {
                         return <Card
                             key={index}
@@ -196,8 +197,8 @@ export default class Station extends React.Component {
                             <Text style={{ fontSize: 30, fontWeight: '500' }}>Quantity: {this.state.currentWorkOrder ? this.state.currentWorkOrder.quantity : 0}</Text>
                         </View>
                         <View style={{ flex: 1, display: 'flex', justifyContent: 'space-around', flexDirection: 'row' }}>
-                            <Button title="stop" onPress={this.stopJob} />
-                            <Button title="finish job" onPress={this.finishJob} />
+                            <AnButton color="#2196f3" title="stop" onPress={this.stopJob} />
+                            <AnButton color="#2196f3" title="finish job" onPress={this.finishJob} />
                         </View>
                     </View>
                 </Modal>
@@ -216,7 +217,7 @@ export default class Station extends React.Component {
                         <View style={{ flex: 4 }}>
                             <Text style={{ position: 'relative', left: '5%', fontSize: 28 }}>Parts Completed: </Text>
                             <TextInput style={{ borderColor: 'gray', borderWidth: 1, width: '90%', position: 'relative', left: '5%', height: 28 }} onChangeText={text => this.handleNumberInput(text)} value={this.state.partsCompleted} keyboardType='number-pad' />
-                            <Button style={{ marginTop: 20 }} title='Submit' onPress={this.submitJob} />
+                            <AnButton color="#fff" title='Submit' onPress={this.submitJob} />
                         </View>
                     </View>
                 </Modal>

@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, SafeAreaView, ScrollView, Button, RefreshControl, Modal, FlatList } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, RefreshControl, Modal, FlatList } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
+import AnButton from '../components/AnButton';
 import Axios from 'axios';
 import Card from '../components/Card';
 const api = 'https://project-runner-f1bdc.firebaseapp.com/api/v1';
@@ -46,7 +47,7 @@ const Row = props => (
         <Text style={{ fontSize: 18 }}>{props.data.part.name}</Text>
         <Text style={{ fontSize: 18 }}>{props.data.quantity}</Text>
         <Text style={{ fontSize: 18 }}>{(props.data.quantity - props.data.partialQty)}</Text>
-        <Button style={{ justifySelf: 'flex-end' }} title="history" onPress={() => props.openHistoryModal(props.data.history)} />
+        <AnButton color="#2196f3" style={{ justifySelf: 'flex-end' }} title="history" onPress={() => props.openHistoryModal(props.data.history)} />
     </View>
 )
 
@@ -137,7 +138,7 @@ export default class Admin extends React.Component {
                     <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start' }}>
                         <View style={{ height: 20 }} />
                         <View style={{ flex: 1 }}>
-                            <Text style={{ fontSize: 34, fontWeight: 'bold', alignSelf: 'center' }}>Work Order Overview</Text>
+                            <Text style={{ fontSize: 34, fontWeight: 'bold', alignSelf: 'center', marginTop: 12 }}>Work Order Overview</Text>
                         </View>
                         <View style={{ flex: 6 }}>
                             {this.state.activeStations ? this.state.activeStations.map((station, index) => {
@@ -161,7 +162,7 @@ export default class Admin extends React.Component {
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item }) => <HistoryItem data={item} />}
                     /> : null}
-                    <Button title='close' onPress={this.closeHistoryModal} />
+                    <AnButton color="#2196f3" title='close' onPress={this.closeHistoryModal} />
                 </Modal>
             </SafeAreaView>
         )

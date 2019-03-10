@@ -3,8 +3,10 @@ import { createDrawerNavigator, createStackNavigator, createAppContainer } from 
 import { SecureStore } from 'expo';
 import Login from './login/Login';
 import Employee from './employee/Employee';
+import Employees from './admin/Employees';
 import Admin from './admin/Admin';
 import Station from './employee/Station';
+import WorkStations from './admin/WorkStations';
 import Axios from 'axios';
 const api = 'https://project-runner-f1bdc.firebaseapp.com/api/v1';
 
@@ -21,10 +23,12 @@ EmployeeContainer = createAppContainer(EmployeeNavigator);
 
 AdminNavigator = createDrawerNavigator(
   {
-    Overview: Admin
+    Overview: Admin,
+    "Work Stations": WorkStations,
+    Employees: Employees
   },
   {
-    initialRouteName: 'Overview'
+    initialRouteName: 'Employees'
   }
 )
 
@@ -86,9 +90,9 @@ export default class App extends React.Component {
     //   )
     // }
     // else if (this.state.isLoggedIn && this.state.isAdmin)
-    //return <AdminContainer />
+    return <AdminContainer />
     // else
-     return <EmployeeContainer />
+    //  return <EmployeeContainer />
   }
 }
 
