@@ -4,7 +4,7 @@ import { NavigationEvents } from 'react-navigation';
 import Axios from 'axios';
 import Card from '../components/Card';
 const api = 'https://project-runner-f1bdc.firebaseapp.com/api/v1';
-import { FileSystem, WebBrowser } from 'expo';
+import { WebBrowser } from 'expo';
 import firebase from 'firebase/app';
 import 'firebase/storage';
 
@@ -18,7 +18,7 @@ const config = {
 };
 firebase.initializeApp(config);
 
-export default class Employees extends React.Component {
+export default class Parts extends React.Component {
     constructor(props) {
         super(props);
         this.state = {

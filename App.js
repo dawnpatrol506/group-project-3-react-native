@@ -8,6 +8,7 @@ import Employees from './admin/Employees';
 import Admin from './admin/Admin';
 import Station from './employee/Station';
 import WorkStations from './admin/WorkStations';
+import WorkOrders from './admin/WorkOrders';
 import Axios from 'axios';
 const api = 'https://project-runner-f1bdc.firebaseapp.com/api/v1';
 
@@ -27,10 +28,11 @@ AdminNavigator = createDrawerNavigator(
     Overview: Admin,
     "Work Stations": WorkStations,
     Parts: Parts,
+    WorkOrders: WorkOrders,
     Employees: Employees
   },
   {
-    initialRouteName: 'Parts'
+    initialRouteName: 'WorkOrders'
   }
 )
 

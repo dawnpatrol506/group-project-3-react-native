@@ -18,7 +18,7 @@ const config = {
 };
 firebase.initializeApp(config);
 
-export default class Parts extends React.Component {
+export default class WorkOrders extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
