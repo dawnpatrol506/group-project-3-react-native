@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
         shadowColor: 'grey',
         shadowOpacity: 0.5,
         shadowOffset: { width: 0.1, height: 0.1 },
-        zIndex: 1000
+        zIndex: 1000,
+        elevation: 3
     },
 
     icon: {

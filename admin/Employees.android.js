@@ -132,6 +132,7 @@ export default class Employees extends React.Component {
                     contentContainerStyle={{}}
                     refreshControl={<RefreshControl onRefresh={this.handleRefresh} refreshing={this.state.refreshing} />}
                 >
+                    <View style={{height: 25}} />
                     <View style={{ flex: 1, display: 'flex', justifyContent: 'center', flexDirection: 'row' }}>
                         <Text style={styles.header}>Employees</Text>
                     </View>

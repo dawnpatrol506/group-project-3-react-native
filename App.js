@@ -2,6 +2,7 @@ import React from 'react';
 import { createDrawerNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
 import { SecureStore } from 'expo';
 import Login from './login/Login';
+import Parts from './admin/Parts';
 import Employee from './employee/Employee';
 import Employees from './admin/Employees';
 import Admin from './admin/Admin';
@@ -25,10 +26,11 @@ AdminNavigator = createDrawerNavigator(
   {
     Overview: Admin,
     "Work Stations": WorkStations,
+    Parts: Parts,
     Employees: Employees
   },
   {
-    initialRouteName: 'Employees'
+    initialRouteName: 'Parts'
   }
 )
 

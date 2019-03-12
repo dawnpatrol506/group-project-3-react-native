@@ -29,7 +29,7 @@ const style = StyleSheet.create({
         borderTopWidth: 0.5,
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
     },
     cardContent: {
         flex: 1,
@@ -44,8 +44,8 @@ const style = StyleSheet.create({
         flex: 1,
         minHeight: 120,
         backgroundColor: '#f2f2f2',
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10
+        // borderBottomLeftRadius: 10,
+        // borderBottomRightRadius: 10
     },
     hidden: { display: 'none' }
 })
