@@ -1,8 +1,8 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, View, Text, RefreshControl, Modal, TouchableOpacity, TextInput } from 'react-native';
+import { SafeAreaView, ScrollView, View, Text, RefreshControl, Modal, TextInput, StyleSheet } from 'react-native';
+import AnButton from '../components/AnButton';
 import { NavigationEvents } from 'react-navigation';
 import { SecureStore } from 'expo';
-import AnButton from '../components/AnButton';
 import Card from '../components/Card';
 import Axios from 'axios';
 let username = null;
@@ -66,8 +66,10 @@ export default class Station extends React.Component {
         }
     }
 
-    static navigationOptions = {
-        title: 'Station'
+    static navigationOptions = ({navigation}) =>  {
+        return {
+        title: navigation.state.params.stationsName
+        }
     }
 
     handleRefresh = () => {
@@ -153,7 +155,7 @@ export default class Station extends React.Component {
             .catch(err => this.setState({ err }));
 
         this.handleRefresh();
-        this.setState({ showFinishModal: false, showStartModal: false })
+        this.setState({ showFinishModal: false, showStartModal: false, quantity: '' })
     }
 
     handleNumberInput = text => {
@@ -170,14 +172,14 @@ export default class Station extends React.Component {
                 <NavigationEvents
                     onWillFocus={this.handleRefresh}
                 />
-                <ScrollView refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.handleRefresh} />}>
+                <ScrollView style={{backgroundColor: 'white'}} refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.handleRefresh} />}>
                     {this.state.workOrders ? this.state.workOrders.map((wo, index) => {
                         return <Card
                             key={index}
                             hasButtons={true}
                             title={wo.part.name}
                             content={<Content qty={wo.quantity} remaining={wo.quantity - wo.partialQty} notes={wo.notes} />}
-                            buttons={[{ name: 'start', func: () => this.startJob(index) }]}
+                            buttons={[{ color: '#2196f3', name: 'start', func: () => this.startJob(index) }]}
                         />
                     }) : null}
                 </ScrollView>
@@ -196,7 +198,7 @@ export default class Station extends React.Component {
                         <View style={{ flex: 3, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
                             <Text style={{ fontSize: 30, fontWeight: '500' }}>Quantity: {this.state.currentWorkOrder ? this.state.currentWorkOrder.quantity : 0}</Text>
                         </View>
-                        <View style={{ flex: 1, display: 'flex', justifyContent: 'space-around', flexDirection: 'row' }}>
+                        <View style={{ flex: 1, display: 'flex', justifyContent: 'space-evenly', flexDirection: 'row' }}>
                             <AnButton color="#2196f3" title="stop" onPress={this.stopJob} />
                             <AnButton color="#2196f3" title="finish job" onPress={this.finishJob} />
                         </View>
@@ -215,9 +217,8 @@ export default class Station extends React.Component {
                             <Text style={{ color: 'red' }}>{this.state.jobSubmissionErr}</Text>
                         </View>
                         <View style={{ flex: 4 }}>
-                            <Text style={{ position: 'relative', left: '5%', fontSize: 28 }}>Parts Completed: </Text>
-                            <TextInput style={{ borderColor: 'gray', borderWidth: 1, width: '90%', position: 'relative', left: '5%', height: 28 }} onChangeText={text => this.handleNumberInput(text)} value={this.state.partsCompleted} keyboardType='number-pad' />
-                            <AnButton color="#fff" title='Submit' onPress={this.submitJob} />
+                            <TextInput style={styles.input} onChangeText={text => this.handleNumberInput(text)} value={this.state.partsCompleted} keyboardType='number-pad' placeholder="Parts completed" />
+                            <AnButton color="#2196f3" title='Submit' onPress={this.submitJob} />
                         </View>
                     </View>
                 </Modal>
@@ -225,3 +226,35 @@ export default class Station extends React.Component {
         )
     }
 }
+
+const styles = StyleSheet.create({
+    row: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        height: 60,
+        alignItems: 'center',
+        borderBottomColor: 'grey',
+        borderBottomWidth: 0.5,
+        width: '90%',
+        position: 'relative',
+        left: '5%',
+    },
+
+    header: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        marginBottom: 25,
+    },
+
+    input: {
+        fontSize: 20,
+        alignSelf: 'flex-start',
+        backgroundColor: '#f2f2f2',
+        width: '100%',
+        borderRadius: 10,
+        marginBottom: 16,
+        padding: 12,
+    }
+})

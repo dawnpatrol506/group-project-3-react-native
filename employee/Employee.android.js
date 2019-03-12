@@ -2,7 +2,6 @@ import React from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import Axios from 'axios';
-import { SecureStore } from 'expo';
 
 export default class Employee extends React.Component {
     constructor(props) {
@@ -12,6 +11,10 @@ export default class Employee extends React.Component {
             err: null,
             refreshing: false
         }
+    }
+
+    static navigationOptions = () => {
+        return { title: global.uInfo ? JSON.parse(global.uInfo).username : 'Employee Page' }
     }
 
     handleRefresh = () => {
@@ -28,10 +31,6 @@ export default class Employee extends React.Component {
             .catch(err => this.setState({ err, refreshing: false }))
     }
 
-    static navigationOptions = {
-        title: 'Employee Employeesen', //needs to be dynamic
-    }
-
     render() {
         return (
             <SafeAreaView style={{ flex: 1, justifyContent: 'center' }}>
@@ -45,7 +44,7 @@ export default class Employee extends React.Component {
                             {this.state.stations ? this.state.stations.map((station, index) => {
                                 return (
                                     <TouchableOpacity key={index} onPress={() => this.props.navigation.navigate('Station', { stationID: station.id, stationsName: station.name })}>
-                                        <Text style={{color: '#2196f3', fontSize: 20, marginBottom: 20, alignSelf: 'center'}}>{station.name}</Text>
+                                        <Text style={{ color: '#2196f3', fontSize: 20, marginBottom: 20, alignSelf: 'center' }}>{station.name}</Text>
                                     </TouchableOpacity>
                                 )
                             }) : null}

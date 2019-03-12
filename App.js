@@ -15,11 +15,16 @@ const api = 'https://project-runner-f1bdc.firebaseapp.com/api/v1';
 EmployeeNavigator = createStackNavigator(
   {
     Home: Employee,
-    Station: Station
+    Station: Station,
+    "Log out": () => {
+      Axios.post(`${api}/auth/logout`);
+      return <Login />
+    }
   },
   {
     initialRouteName: 'Home'
-  })
+  },
+)
 
 EmployeeContainer = createAppContainer(EmployeeNavigator);
 
@@ -29,10 +34,10 @@ AdminNavigator = createDrawerNavigator(
     "Work Stations": WorkStations,
     Parts: Parts,
     WorkOrders: WorkOrders,
-    Employees: Employees
+    Employees: Employees,
   },
   {
-    initialRouteName: 'WorkOrders'
+    initialRouteName: 'Overview'
   }
 )
 
@@ -72,6 +77,7 @@ export default class App extends React.Component {
           username: result.data.name
         }
         const str = JSON.stringify(userInfo);
+        global.uInfo = str;
 
         SecureStore.deleteItemAsync('userInfo')
           .then(() => SecureStore.setItemAsync('userInfo', str));
@@ -81,22 +87,22 @@ export default class App extends React.Component {
   }
 
   render() {
-    // if (!this.state.isLoggedIn) {
-    //   return (
-    //     <Login
-    //       username={this.state.username}
-    //       handleUsernameChange={this.handleUsernameChange}
-    //       password={this.state.password}
-    //       handlePasswordChange={this.handlePasswordChange}
-    //       login={this.login}
-    //       err={this.state.err}
-    //     />
-    //   )
-    // }
-    // else if (this.state.isLoggedIn && this.state.isAdmin)
-    return <AdminContainer />
-    // else
-    //  return <EmployeeContainer />
+    if (!this.state.isLoggedIn) {
+      return (
+        <Login
+          username={this.state.username}
+          handleUsernameChange={this.handleUsernameChange}
+          password={this.state.password}
+          handlePasswordChange={this.handlePasswordChange}
+          login={this.login}
+          err={this.state.err}
+        />
+      )
+    }
+    else if (this.state.isLoggedIn && this.state.isAdmin)
+      return <AdminContainer />
+    else
+    return <EmployeeContainer />
   }
 }
 

@@ -65,8 +65,10 @@ export default class Station extends React.Component {
         }
     }
 
-    static navigationOptions = {
-        title: 'Station'
+    static navigationOptions = ({navigation}) =>  {
+        return {
+        title: navigation.state.params.stationsName
+        }
     }
 
     handleRefresh = () => {
@@ -152,7 +154,7 @@ export default class Station extends React.Component {
             .catch(err => this.setState({ err }));
 
         this.handleRefresh();
-        this.setState({ showFinishModal: false, showStartModal: false })
+        this.setState({ showFinishModal: false, showStartModal: false, quantity: '' })
     }
 
     handleNumberInput = text => {
