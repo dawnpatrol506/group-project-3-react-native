@@ -124,7 +124,7 @@ export default class Station extends React.Component {
             .catch(err => this.setState({ err }))
 
         this.handleRefresh();
-        this.setState({ showStartModal: false, showFinishModal: false, time: 0 });
+        this.setState({ showStartModal: false, showFinishModal: false, time: 0, quantity: ''});
     }
 
     submitJob = () => {
@@ -155,7 +155,7 @@ export default class Station extends React.Component {
             .catch(err => this.setState({ err }));
 
         this.handleRefresh();
-        this.setState({ showFinishModal: false, showStartModal: false, quantity: '' })
+        this.setState({ showFinishModal: false, showStartModal: false, quantity: '', timer: 0 })
     }
 
     handleNumberInput = text => {
