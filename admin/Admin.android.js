@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, SafeAreaView, ScrollView, RefreshControl, Modal, FlatList } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, Button, RefreshControl, Modal, StyleSheet } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import AnButton from '../components/AnButton';
 import Axios from 'axios';
@@ -27,29 +27,6 @@ function displayTime(time) {
 }
 
 let sum = 0;
-
-const CardTable = props => {
-    return (
-        <View style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', flexDirection: 'column', alignItems: 'flex-start', width: '96%', position: 'relative', left: '2%', borderColor: 'gray', alignItems: 'center' }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                <Text style={{ flex: 1, fontSize: 18 }}>Name, qty, remaining qty</Text>
-            </View>
-            {props.data.map((wo, index) => {
-                if (wo.currentStation.id === props.stationId)
-                    return <Row key={index} data={wo} openHistoryModal={props.openHistoryModal} />
-            })}
-        </View>
-    )
-}
-
-const Row = props => (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'white', borderRadius: 10, height: 60, alignItems: 'center', marginTop: 15, marginBottom: 15, width: '98%', position: 'relative', left: '1%' }}>
-        <Text style={{ fontSize: 18 }}>{props.data.part.name}</Text>
-        <Text style={{ fontSize: 18 }}>{props.data.quantity}</Text>
-        <Text style={{ fontSize: 18 }}>{(props.data.quantity - props.data.partialQty)}</Text>
-        <AnButton color="#2196f3" style={{ justifySelf: 'flex-end' }} title="history" onPress={() => props.openHistoryModal(props.data.history)} />
-    </View>
-)
 
 const HistoryItem = props => (
     <View style={{ flexDirection: 'row' }}>
@@ -137,13 +114,26 @@ export default class Admin extends React.Component {
                 >
                     <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start' }}>
                         <View style={{ height: 20 }} />
-                        <View style={{ flex: 1 }}>
-                            <Text style={{ fontSize: 34, fontWeight: 'bold', alignSelf: 'center', marginTop: 12 }}>Work Order Overview</Text>
+                        <View >
+                            <Text style={{ fontSize: 34, fontWeight: 'bold', alignSelf: 'center' }}>Work Order Overview</Text>
                         </View>
                         <View style={{ flex: 6 }}>
                             {this.state.activeStations ? this.state.activeStations.map((station, index) => {
                                 return (
-                                    <Card key={index} content={<CardTable data={this.state.workOrders} stationId={station.id} openHistoryModal={this.openHistoryModal} />} title={station.name} hasButtons={false} />
+                                    <View key={index} style={styles.table}>
+                                        <Text style={styles.header}>{station.name}</Text>
+                                        <View style={{ height: 20 }} />
+                                        {this.state.workOrders.map((wo, index) => {
+                                            return (
+                                                <View key={index} style={styles.row}>
+                                                    <Text>{wo.part.name}</Text>
+                                                    <Text>{wo.quantity}</Text>
+                                                    <Text>{wo.quantity - wo.partialQty}</Text>
+                                                    <AnButton color="#2196f3" title="History" onPress={() => this.openHistoryModal(wo.history)} style={{alignSelf: 'flex-end'}} />
+                                                </View>
+                                            )
+                                        })}
+                                    </View>
                                 )
                             }) : null}
                         </View>
@@ -154,17 +144,89 @@ export default class Admin extends React.Component {
                     transparent={false}
                     visible={this.state.showHistoryModal}
                     onRequestClose={this.closeHistoryModal}
+                    style={{ flex: 1, dislay: 'flex', flexDirection: 'columtn', justifyContent: 'center' }}
                 >
                     <View style={{ height: 20 }} />
-                    <Text>Work Order History</Text>
-                    {this.state.currentHistory ? <FlatList
-                        data={this.state.currentHistory}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={({ item }) => <HistoryItem data={item} />}
-                    /> : null}
-                    <AnButton color="#2196f3" title='close' onPress={this.closeHistoryModal} />
+                    <View style={styles.historyTable}>
+                        <Text style={styles.header} >Part History</Text>
+                        <View style={styles.rowHeader}>
+                            <Text style={{ fontWeight: '700' }}>Station</Text>
+                            <Text style={{ fontWeight: '700' }}>Employee</Text>
+                            <Text style={{ fontWeight: '700' }}>Qty Completed</Text>
+                            <Text style={{ fontWeight: '700' }}>Time</Text>
+                        </View>
+                        {this.state.currentHistory ? this.state.currentHistory.map((item, index) => {
+                            sum += item.time;
+                            return (
+                                <View key={index} style={styles.row}>
+                                    <Text>{item.stationName}</Text>
+                                    <Text>{item.employeeName}</Text>
+                                    <Text>{item.partsCompleted}</Text>
+                                    <Text>{displayTime(item.time)}</Text>
+                                </View>
+                            )
+                        }) : null}
+                        <View style={styles.total}>
+                            <Text style={{ fontWeight: 'bold', fontSize: 20 }}>Total Time: {displayTime(sum)}</Text>
+                        </View>
+                        <AnButton color="#2196f3" title='close' onPress={this.closeHistoryModal} />
+                    </View>
                 </Modal>
             </SafeAreaView>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    table: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: 8,
+        borderWidth: 1,
+        borderColor: 'black',
+        marginTop: 20
+    },
+
+    historyTable: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        padding: 8,
+    },
+
+    header: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        marginBottom: 12
+    },
+
+    rowHeader: {
+        fontWeight: 'bold',
+        fontSize: 20,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        fontSize: 20,
+        marginBottom: 8,
+    },
+
+    row: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        fontSize: 20,
+        marginBottom: 8,
+    },
+
+    total: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        fontWeight: '800'
+    }
+})

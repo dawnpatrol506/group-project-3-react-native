@@ -102,7 +102,7 @@ export default class App extends React.Component {
     else if (this.state.isLoggedIn && this.state.isAdmin)
       return <AdminContainer />
     else
-    return <EmployeeContainer />
+      return <EmployeeContainer />
   }
 }
 
